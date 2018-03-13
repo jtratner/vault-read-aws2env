@@ -76,10 +76,17 @@ func printEnvCode(env map[string]string) {
 
 func main() {
 	flag.BoolVar(&verboseMode, "verbose", false, "Enable debug output")
+	// prevent all of vault's CLI params from leaking through
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "Usage: %s [-verbose] aws/creds/<path>\n", os.Args[0])
+		fmt.Fprint(os.Stderr, "  -verbose\n\tEnable debug output\n")
+		fmt.Fprint(os.Stderr, "  Environment Variables:\n")
+		fmt.Fprint(os.Stderr, "\tVAULT_ADDR: set vault hostname\n\tVAULT_TOKEN: use a specific token to auth to vault\n")
+	}
+
 	flag.Parse()
 	if flag.NArg() != 1 {
-		fmt.Fprintf(os.Stderr, "Usage: %s aws/creds/<path>\n", os.Args[0])
-		fmt.Fprint(os.Stderr, "(set VAULT_ADDR and VAULT_TOKEN env vars to influence behavior)")
+		flag.Usage()
 		os.Exit(1)
 	}
 	path := flag.Arg(0)
