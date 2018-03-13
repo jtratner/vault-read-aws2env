@@ -1,6 +1,16 @@
 # vault-read-aws2env
 Read Vault ephemeral AWS creds into environment variables
 
+## Installation
+
+If you have go installed you can use `go get` (1.9+)
+
+```
+$ go get -u github.com/jtratner/vault-read-aws2env
+```
+
+Or you can download release tarballs once they are available on github.
+
 ## Usage
 
 By defualt, Vault's AWS Secrets Backend generates output as a table like this
