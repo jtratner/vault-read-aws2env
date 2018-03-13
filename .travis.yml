@@ -5,6 +5,7 @@ script:
   - go build
   # confirm script can use -h
   - ./vault-read-aws2env -h; ret=$?; if [  $ret -ne 2 ]; then exit 1; else echo "Help exited 2 as expected";  fi
+  - go get -t
   - go test
 deploy:
   - provider: script
