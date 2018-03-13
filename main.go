@@ -87,7 +87,7 @@ func main() {
 	flag.Parse()
 	if flag.NArg() != 1 {
 		flag.Usage()
-		os.Exit(1)
+		os.Exit(2)
 	}
 	path := flag.Arg(0)
 	client, err := api.NewClient(nil)
