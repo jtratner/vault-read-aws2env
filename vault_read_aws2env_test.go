@@ -147,7 +147,7 @@ var _ = Describe("VaultReadAws2env", func() {
 				}}}, path)).To(Equal(map[string]string{
 				"AWS_ACCESS_KEY_ID":     "abc",
 				"AWS_SECRET_ACCESS_KEY": "mysecret",
-				"AWS_SECURITY_TOKEN":    "",
+				"AWS_SESSION_TOKEN":     "",
 			}))
 		})
 		It("should convert all args", func() {
@@ -165,7 +165,7 @@ var _ = Describe("VaultReadAws2env", func() {
 		It("should error usefully when path not found", func() {
 			val, err := awsEnvVars(&DummyLogical{}, path)
 			errorShouldMatch(
-				err, val, "NOT FOUND!!")
+				err, val, ".*aws/creds/myrole.*NOT FOUND")
 		})
 	})
 })

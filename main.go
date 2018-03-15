@@ -57,44 +57,11 @@ func awsEnvVars(logical Logical, path string) (map[string]string, error) {
 	environ := []string{
 		fmt.Sprintf("AWS_ACCESS_KEY_ID=vault:%s!!!access_key", path),
 		fmt.Sprintf("AWS_SECRET_ACCESS_KEY=vault:%s!!!secret_key", path),
-		fmt.Sprintf("AWS_SECURITY_TOKEN=vault:%s!!!security_token", path),
+		fmt.Sprintf("AWS_SESSION_TOKEN=vault:%s!!!security_token", path),
 	}
-	fmt.Println(environ)
 	sep := "!!!"
 	return substituteVaultPaths(logical, environ, sep)
 
-}
-
-// converts an api.Secret's data to a mapping of environment variable => value
-func secretData2EnvMapping(data map[string]interface{}) map[string]string {
-	getStringMapValue := func(key string) (string, bool) {
-		wrapped_value, ok := data[key]
-		if !ok {
-			return "", false
-		}
-		value, ok := wrapped_value.(string)
-		if !ok {
-			return "", false
-		}
-		return value, ok
-
-	}
-	out := make(map[string]string)
-	if access_key, ok := getStringMapValue("access_key"); ok {
-		out["AWS_ACCESS_KEY_ID"] = access_key
-	} else {
-		log.Fatalf("No access key on request!")
-	}
-	if secret_key, ok := getStringMapValue("secret_key"); ok {
-		out["AWS_SECRET_ACCESS_KEY"] = secret_key
-	} else {
-		log.Fatalf("No secret key on request!")
-	}
-	// for some reason backend names differently
-	if security_token, ok := getStringMapValue("security_token"); ok {
-		out["AWS_SESSION_TOKEN"] = security_token
-	}
-	return out
 }
 
 func printEnvCode(env map[string]string) {
@@ -191,7 +158,6 @@ func lookupPath(logical Logical, path VaultPath, cache map[string]map[string]int
 // AWS_SECURITY_TOKEN=aws/creds/myrole:security_token
 func substituteVaultPaths(logical Logical, environ []string, keySep string) (map[string]string, error) {
 	vaultMap := findVarsToFillInFromEnv(environ)
-	fmt.Println("found vars", vaultMap)
 	cache := make(map[string]map[string]interface{}, len(vaultMap))
 	outMap := make(map[string]string, len(vaultMap))
 	for envvar, path := range vaultMap {
