@@ -66,7 +66,7 @@ func awsEnvVars(logical Logical, path string) (map[string]string, error) {
 
 func printEnvCode(env map[string]string) {
 	for k, v := range env {
-		fmt.Printf("export %s=%s\n", k, v)
+		fmt.Printf("export %s='%s'\n", k, v)
 	}
 }
 
