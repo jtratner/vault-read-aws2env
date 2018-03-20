@@ -1,0 +1,8 @@
+builds:
+  - binary: vault-read-aws2env
+    goos:
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64

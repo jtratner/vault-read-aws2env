@@ -1,0 +1,16 @@
+language: go
+install:
+  - make bootstrap
+script:
+  - go build
+  # confirm script can use -h
+  - ./vault-read-aws2env -h; ret=$?; if [  $ret -ne 2 ]; then exit 1; else echo "Help exited 2 as expected";  fi
+  - go get -t
+  - go test
+deploy:
+  - provider: script
+    skip_cleanup: true
+    # TODO - hard code this rather than use a curl | bash format
+    script: curl -sL http://git.io/goreleaser | bash
+    on:
+      tags: true
